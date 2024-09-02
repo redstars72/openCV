@@ -11,7 +11,7 @@ for root, subfolders, files in os.walk(mainfolder):
         path=os.path.join(mainfolder,subfolder)
         for file in os.listdir(path):
             imagepath=os.path.join(path,file)
-            images.append(cv2.imread(imagepath))
+            images.append(cv2.imread(imagepath,0))
             labels.append(id)
         id+=1
 print(names)
@@ -29,13 +29,13 @@ while True:
     ret,fra=cam.read()
     gryfra=cv2.cvtColor(fra,cv2.COLOR_BGR2GRAY)
     facedet=det.detectMultiScale(gryfra,1.4,4)
-    """if len(facedet)>0:
+    if len(facedet)>0:
         for x,y,w,h in facedet:
             cv2.rectangle(fra,(x,y),(x+w,y+h),(0,255,0),3)
             face=gryfra[y:y+h,x:x+w]
             resiface=cv2.resize(face,(width,height))
             pred,conf=model.predict(resiface)
-            print(pred)"""
+            cv2.putText(fra,names[pred]+":"+str(round(conf))+"%",(x,y-20),cv2.FONT_HERSHEY_SIMPLEX,1.5,(0,255,0),5)
     cv2.imshow("camera",fra)
     key=cv2.waitKey(5)
     if key==27:
